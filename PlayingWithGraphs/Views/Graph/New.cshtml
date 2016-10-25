@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "New";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>New</h2>
+    @using (Html.BeginForm("New", "Graph", FormMethod.Post))
+    {
+        @Html.Label("New Graph Name");
+        @Html.TextBox("name");
+        <input type="submit" />
+    }
+</div>
+
+

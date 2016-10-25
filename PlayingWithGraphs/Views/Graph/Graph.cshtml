@@ -1,0 +1,28 @@
+﻿@using PlayingWithGraphs.Models
+@model Graph
+
+@{
+    ViewBag.Title = "Graph";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>@Model.GraphName</h2>
+    
+    <div id="node-context">
+        <form id="node-input">
+            <input type="text" id="ntext" />
+            <input type="submit" />
+        </form>
+    </div>
+</div>
+<div id="graph-area" class="container-fluid">
+    @foreach (KeyValuePair<int, Node> node in Model.nodes)
+    {
+        string style = String.Format("left: {0}px; top: {1}px;", node.Value.x, node.Value.y);
+        <div id="node-@node.Value.nid"class="node" style="@style">@node.Value.text</div>
+    }
+</div>
+<script src="~/scripts/nodes.js"></script>
+<script src="~/scripts/connections.js"></script>
+

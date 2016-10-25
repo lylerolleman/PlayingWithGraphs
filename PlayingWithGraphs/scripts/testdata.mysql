@@ -1,0 +1,4 @@
+INSERT INTO Graph (graph_name) VALUES ('test');
+INSERT INTO Node (ntext, x, y, gid) VALUES ('Node1', 200, 200, 1);
+INSERT INTO Node (ntext, x, y, gid) VALUES ('Node2', 300, 200, 1);
+INSERT INTO Con (n1, n2) VALUES(1, 2);

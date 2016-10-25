@@ -1,0 +1,20 @@
+﻿@model List<Tuple<int, string>>
+@{
+    ViewBag.Title = "Home";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <h2>Playing with Graphs</h2>
+    <p>A simple application to monkey around with graphs</p>
+    <h4>Graphs:</h4>
+    @foreach (Tuple<int, string> graph in Model)
+    {
+        <a href="Graph/Graph/@graph.Item1">@graph.Item2</a><br />
+    }
+    <br />
+    <a href="/Graph/New" class="btn btn-primary">Create New Graph</a>
+    
+</div>
+
+
