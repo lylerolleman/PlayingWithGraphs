@@ -23,7 +23,7 @@
     $(document).on("click", ".node", function () {
         if (selected_node == null) {
             selected_node = $(this);
-            $("#node-input").show();
+            
         } else {
             $("#node-input").hide();
             var source = selected_node.attr("id");

@@ -11,7 +11,7 @@
     
     <div id="node-context">
         <form id="node-input">
-            <input type="text" id="ntext" />
+            <!--<input type="text" id="ntext" />-->
             <input type="submit" />
         </form>
     </div>
@@ -20,7 +20,7 @@
     @foreach (KeyValuePair<int, Node> node in Model.nodes)
     {
         string style = String.Format("left: {0}px; top: {1}px;", node.Value.x, node.Value.y);
-        <div id="node-@node.Value.nid"class="node" style="@style">@node.Value.text</div>
+        <div id="node-@node.Value.nid" class="node editable" contenteditable="true" style="@style">@node.Value.text</div>
     }
 </div>
 <script src="~/scripts/nodes.js"></script>

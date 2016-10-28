@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 
@@ -8,14 +9,13 @@ namespace PlayingWithGraphs.Models
 {
     public static class DatabaseManager
     {
-        private static MySqlConnection con = new MySqlConnection();
+        private static SqlConnection con = new SqlConnection();
 
         public static int InsertNewGraph(string name)
         {
-            string create_insert = "INSERT INTO Graph (graph_name) VALUES ('" + name + "')";
+            string create_insert = "INSERT INTO Graph (graph_name) OUTPUT INSERTED.gid VALUES ('" + name + "')";
             var com = GetCommand(create_insert);
-            com.ExecuteNonQuery();
-            int gid = (int)com.LastInsertedId;
+            int gid = (int)com.ExecuteScalar(); ;
             con.Close();
             return gid;
         }
@@ -23,7 +23,7 @@ namespace PlayingWithGraphs.Models
         {
             string name_query = "SELECT graph_name FROM Graph WHERE gid = " + id;
             var com = GetCommand(name_query);
-            MySqlDataReader reader = com.ExecuteReader();
+            var reader = com.ExecuteReader();
             string name = "empty";
             if (reader.Read())
                 name = reader.GetString(0);
@@ -36,7 +36,7 @@ namespace PlayingWithGraphs.Models
             List<Tuple<int, string>> graph_list = new List<Tuple<int, string>>();
             string graph_list_query = "SELECT gid, graph_name FROM Graph";
             var com = GetCommand(graph_list_query);
-            MySqlDataReader reader = com.ExecuteReader();
+            var reader = com.ExecuteReader();
             while (reader.Read())
             {
                 int gid = reader.GetInt32(0);
@@ -53,7 +53,7 @@ namespace PlayingWithGraphs.Models
             List<Node> nodes = new List<Node>();
             string nodes_query = "SELECT nid, ntext, x, y FROM Node WHERE gid = " + gid;
             var com = GetCommand(nodes_query);
-            MySqlDataReader reader = com.ExecuteReader();
+            var reader = com.ExecuteReader();
             while (reader.Read())
             {
                 int nid = reader.GetInt32(0);
@@ -87,18 +87,21 @@ namespace PlayingWithGraphs.Models
         }
         public static int AddNode(int gid, string tid, string ntext, int x, int y)
         {
-            string node_insert = String.Format("INSERT INTO Node (ntext, x, y, gid) " +
+            string node_insert = String.Format("INSERT INTO Node (ntext, x, y, gid) OUTPUT INSERTED.nid " +
                 "VALUES('{0}', {1}, {2}, {3})", ntext, x, y, gid);
             var com = GetCommand(node_insert);
-            com.ExecuteNonQuery();
-            int nid = (int)com.LastInsertedId;
+            int nid = (int)com.ExecuteScalar(); ;
             con.Close();
             return nid;
         }
         public static void DeleteNode(Node node)
         {
-            string delete_stat = String.Format("DELETE FROM Node WHERE nid = {0}", node.nid);
-            var com = GetCommand(delete_stat);
+            string delete_cons = String.Format("DELETE FROM Con WHERE n1 = {0} OR n2 = {1}", node.nid, node.nid);
+            var com = GetCommand(delete_cons);
+            com.ExecuteNonQuery();
+            con.Close();
+            string delete_node = String.Format("DELETE FROM Node WHERE nid = {0}", node.nid);
+            com = GetCommand(delete_node);
             com.ExecuteNonQuery();
             con.Close();
         }
@@ -118,20 +121,19 @@ namespace PlayingWithGraphs.Models
         }
         public static int InsertConnection(Node n1, Node n2)
         {
-            string con_insert = String.Format("INSERT INTO con (n1, n2) VALUES({0}, {1})", n1.nid, n2.nid);
+            string con_insert = String.Format("INSERT INTO con (n1, n2) OUTPUT INSERTED.cid VALUES({0}, {1})", n1.nid, n2.nid);
             var com = GetCommand(con_insert);
-            com.ExecuteNonQuery();
-            int cid = (int)com.LastInsertedId;
+            int cid = (int)com.ExecuteScalar();
             con.Close();
             return cid;
         }
 
-        private static MySqlCommand GetCommand(string query)
+        private static SqlCommand GetCommand(string query)
         {
-            string cstring = "server=localhost;user id=root;password=dev;database=Graph;allowuservariables=True;persistsecurityinfo=True";
+            string cstring = "server=LYLE-PC\\SQLEXPRESS;database=Graph;Integrated Security=True;";
             con.ConnectionString = cstring;
             con.Open();
-            MySqlCommand com = con.CreateCommand();
+            var com = con.CreateCommand();
             com.CommandText = query;
             return com;
         }

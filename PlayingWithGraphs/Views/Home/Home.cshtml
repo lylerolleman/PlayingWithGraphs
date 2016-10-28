@@ -10,11 +10,11 @@
     <h4>Graphs:</h4>
     @foreach (Tuple<int, string> graph in Model)
     {
-        <a href="Graph/Graph/@graph.Item1">@graph.Item2</a><br />
+        @Html.ActionLink(graph.Item2, "Graph", "Graph" , new { id = graph.Item1 }, null);
     }
     <br />
-    <a href="/Graph/New" class="btn btn-primary">Create New Graph</a>
-    
+    <br />
+    @Html.ActionLink("Create New Graph", "New", "Graph", null, new { @class = "btn btn-primary" });
 </div>
 
 

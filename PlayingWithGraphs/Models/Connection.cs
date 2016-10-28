@@ -17,7 +17,7 @@ namespace PlayingWithGraphs.Models
             this.source = source;
             this.dest = dest;
         }
-        public string ToString()
+        override public string ToString()
         {
             return cid + ": " + source.nid + " " + dest.nid;
         }

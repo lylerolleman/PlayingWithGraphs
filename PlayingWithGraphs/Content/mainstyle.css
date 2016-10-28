@@ -1,10 +1,7 @@
-﻿/*borrowed from http://stackoverflow.com/questions/4801181/vertically-and-horizontally-centering-text-in-circle-in-css-like-iphone-notific */
-.node {
+﻿.node {
     position: absolute;
-    background: radial-gradient( 5px -9px, circle, white 8%, black 26px );
     background-color: black;
     border: 2px solid white;
-    border-radius: 12px; 
     box-shadow: 1px 1px 1px black;
     color: white;
     font: bold 15px/13px Helvetica, Verdana, Tahoma;
