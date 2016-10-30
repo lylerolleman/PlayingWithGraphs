@@ -1,6 +1,7 @@
 ﻿using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
@@ -9,7 +10,7 @@ namespace PlayingWithGraphs.Models
 {
     public static class DatabaseManager
     {
-        private static SqlConnection con = new SqlConnection();
+        private static SqlConnection con = new SqlConnection("server=LYLE-PC\\SQLEXPRESS;database=Graph;Integrated Security=True;");
 
         public static int InsertNewGraph(string name)
         {
@@ -97,11 +98,10 @@ namespace PlayingWithGraphs.Models
         public static void DeleteNode(Node node)
         {
             string delete_cons = String.Format("DELETE FROM Con WHERE n1 = {0} OR n2 = {1}", node.nid, node.nid);
+            string delete_node = String.Format("DELETE FROM Node WHERE nid = {0}", node.nid);
             var com = GetCommand(delete_cons);
             com.ExecuteNonQuery();
-            con.Close();
-            string delete_node = String.Format("DELETE FROM Node WHERE nid = {0}", node.nid);
-            com = GetCommand(delete_node);
+            com.CommandText = delete_node;
             com.ExecuteNonQuery();
             con.Close();
         }
@@ -130,9 +130,14 @@ namespace PlayingWithGraphs.Models
 
         private static SqlCommand GetCommand(string query)
         {
-            string cstring = "server=LYLE-PC\\SQLEXPRESS;database=Graph;Integrated Security=True;";
-            con.ConnectionString = cstring;
-            con.Open();
+            if (con.State != ConnectionState.Closed)
+            {
+                con.Close();
+                con.Open();
+            } else
+            {
+                con.Open();
+            }
             var com = con.CreateCommand();
             com.CommandText = query;
             return com;

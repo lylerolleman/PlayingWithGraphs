@@ -1,0 +1,11 @@
+﻿TODO List
+
+Finish basic feature set
+	Add Edit text popup when node clicked
+	Add JS for connection removal
+
+Implement Class-ER features
+	Add node types for classes, members (parameters and methods separate?) and interfaces
+	Add connection types for relations, extensions and implementations
+	Bulk moving of nodes
+	Conversion to UML?
