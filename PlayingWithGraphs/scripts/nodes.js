@@ -23,7 +23,9 @@
     $(document).on("click", ".node", function () {
         if (selected_node == null) {
             selected_node = $(this);
-            
+            $("#ntext").val(selected_node.text());
+            $("#node-input").show();
+            $("#ntext").focus();
         } else {
             $("#node-input").hide();
             var source = selected_node.attr("id");
@@ -47,8 +49,8 @@
                 nid: selected_node.attr("id"),
                 text: ntext
             });
-            $("#node-input").val("");
             $("#node-input").hide();
+            jsPlumb.repaint(selected_node);
             selected_node = null;
         }
     });

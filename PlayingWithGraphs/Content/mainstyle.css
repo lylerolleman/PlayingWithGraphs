@@ -20,8 +20,13 @@
     margin-top: 100px;
 }
 #node-context {
-    height: 50px;
-}
-#node-input {
-    display: none;
+    height: 75px;
+    width: 50%;
+    position: fixed;
+    border: solid;
+    border-width: 1px;
+    margin: 5% auto;
+    left: 0;
+    right: 0;
+    top: 0;
 }
